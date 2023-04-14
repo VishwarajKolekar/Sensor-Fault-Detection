@@ -1,4 +1,4 @@
-from sensor.entity.config_entity import TrainingPipelineConfig, DataIngestionConfig, DataTransformationConfig
+from sensor.entity.config_entity import TrainingPipelineConfig, DataIngestionConfig,DataValidationConfig, DataTransformationConfig
 from sensor.entity.artifact_entity import DataIngestionArtifact, DataValidationArtifact, DataTransformationArtifact
 from sensor.exception import SensorException
 import sys,os
