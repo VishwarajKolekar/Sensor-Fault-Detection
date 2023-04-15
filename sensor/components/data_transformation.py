@@ -26,6 +26,7 @@ class DataTransformation:
     def __init__(self,data_validation_artifact: DataValidationArtifact, 
                     data_transformation_config: DataTransformationConfig,):
         """
+
         :param data_validation_artifact: Output reference of data ingestion artifact stage
         :param data_transformation_config: configuration for data transformation
         """
@@ -56,16 +57,16 @@ class DataTransformation:
                     ("RobustScaler", robust_scaler) #keep every feature in same range and handle outlier
                     ]
             )
-
+            
             return preprocessor
 
         except Exception as e:
             raise SensorException(e, sys) from e
 
-
+    
     def initiate_data_transformation(self,) -> DataTransformationArtifact:
         try:
-
+            
             train_df = DataTransformation.read_data(self.data_validation_artifact.valid_train_file_path)
             test_df = DataTransformation.read_data(self.data_validation_artifact.valid_test_file_path)
             preprocessor = self.get_data_transformer_object()
@@ -102,8 +103,8 @@ class DataTransformation:
             save_numpy_array_data( self.data_transformation_config.transformed_train_file_path, array=train_arr, )
             save_numpy_array_data( self.data_transformation_config.transformed_test_file_path,array=test_arr,)
             save_object( self.data_transformation_config.transformed_object_file_path, preprocessor_object,)
-
-
+            
+            
             #preparing artifact
             data_transformation_artifact = DataTransformationArtifact(
                 transformed_object_file_path=self.data_transformation_config.transformed_object_file_path,
@@ -114,3 +115,4 @@ class DataTransformation:
             return data_transformation_artifact
         except Exception as e:
             raise SensorException(e, sys) from e
+

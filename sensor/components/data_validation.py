@@ -18,7 +18,7 @@ class DataValidation:
             self._schema_config = read_yaml_file(SCHEMA_FILE_PATH)
         except Exception as e:
             raise  SensorException(e,sys)
-
+    
     def drop_zero_std_columns(self,dataframe):
         pass
 
@@ -45,7 +45,7 @@ class DataValidation:
                 if num_column not in dataframe_columns:
                     numerical_column_present=False
                     missing_numerical_columns.append(num_column)
-
+            
             logging.info(f"Missing numerical columns: [{missing_numerical_columns}]")
             return numerical_column_present
         except Exception as e:
@@ -57,6 +57,7 @@ class DataValidation:
             return pd.read_csv(file_path)
         except Exception as e:
             raise SensorException(e,sys)
+    
 
     def detect_dataset_drift(self,base_df,current_df,threshold=0.05)->bool:
         try:
@@ -74,11 +75,11 @@ class DataValidation:
                 report.update({column:{
                     "p_value":float(is_same_dist.pvalue),
                     "drift_status":is_found
-
+                    
                     }})
-
+            
             drift_report_file_path = self.data_validation_config.drift_report_file_path
-
+            
             #Create directory
             dir_path = os.path.dirname(drift_report_file_path)
             os.makedirs(dir_path,exist_ok=True)
@@ -86,8 +87,7 @@ class DataValidation:
             return status
         except Exception as e:
             raise SensorException(e,sys)
-
-
+   
 
     def initiate_data_validation(self)->DataValidationArtifact:
         try:
@@ -106,18 +106,18 @@ class DataValidation:
             status = self.validate_number_of_columns(dataframe=test_dataframe)
             if not status:
                 error_message=f"{error_message}Test dataframe does not contain all columns.\n"
-
+        
 
             #Validate numerical columns
 
             status = self.is_numerical_column_exist(dataframe=train_dataframe)
             if not status:
                 error_message=f"{error_message}Train dataframe does not contain all numerical columns.\n"
-
+            
             status = self.is_numerical_column_exist(dataframe=test_dataframe)
             if not status:
                 error_message=f"{error_message}Test dataframe does not contain all numerical columns.\n"
-
+            
             if len(error_message)>0:
                 raise Exception(error_message)
 
